@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@/components/ui/context-menu";
 
 const videoTypes = [
   "Daily",
@@ -14,39 +14,35 @@ const videoTypes = [
   "Backlog Retro",
 ];
 
-export function VideoTypeSelector() {
+interface Props {
+  onClick: (type: string) => void;
+  isRecording: boolean;
+}
+
+export function VideoTypeSelector({ onClick, isRecording }: Readonly<Props>) {
   const [selectedType, setSelectedType] = useState<string>("Select Video Type");
-  const [isOpen, setIsOpen] = useState(false);
+  const isDefaultType = selectedType === "Select Video Type";
+
+  function handleClick() {
+    if (isDefaultType) return;
+
+    onClick(selectedType);
+  }
 
   return (
-    <Popover open={isOpen} onOpenChange={setIsOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          className="w-[200px]"
-          onMouseEnter={() => setIsOpen(true)}
-          onMouseLeave={() => setIsOpen(false)}
-        >
-          {selectedType}
+    <ContextMenu>
+      <ContextMenuTrigger>
+        <Button variant={isRecording ? "destructive" : "default"} className="w-[300px]" onClick={handleClick}>
+          {isRecording ? "Stop Recording" : "Start Recording"} {selectedType}
         </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0" onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)}>
-        <div className="py-2">
-          {videoTypes.map((type) => (
-            <Button
-              key={type}
-              variant="ghost"
-              className="w-full justify-start px-4 py-2 text-sm"
-              onClick={() => {
-                setSelectedType(type);
-                setIsOpen(false);
-              }}
-            >
-              {type}
-            </Button>
-          ))}
-        </div>
-      </PopoverContent>
-    </Popover>
+      </ContextMenuTrigger>
+      <ContextMenuContent className="w-[200px]">
+        {videoTypes.map((type) => (
+          <ContextMenuItem key={type} onClick={() => setSelectedType(type)}>
+            {type}
+          </ContextMenuItem>
+        ))}
+      </ContextMenuContent>
+    </ContextMenu>
   );
 }

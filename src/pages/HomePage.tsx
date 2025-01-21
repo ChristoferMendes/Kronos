@@ -2,6 +2,7 @@ import LangToggle from "@/components/LangToggle";
 import ToggleTheme from "@/components/ToggleTheme";
 import { Button } from "@/components/ui/button";
 import { Select, SelectItem, SelectTrigger, SelectValue, SelectContent } from "@/components/ui/select";
+import { VideoTypeSelector } from "@/components/VideoTypeSelector";
 import { VideoSource } from "@/lib/types/video.types";
 import { cn } from "@/lib/utils";
 import React, { useEffect, useRef, useState } from "react";
@@ -27,8 +28,34 @@ export default function HomePage() {
   const [recordedChunks, setRecordedChunks] = useState<Blob[]>([]);
   const [isRecording, setIsRecording] = useState(false);
 
+  function buildVideoStream(videoId: string) {
+    const constraints = {
+      audio: {
+        mandatory: {
+          chromeMediaSource: "desktop",
+        },
+      },
+      video: {
+        mandatory: {
+          chromeMediaSource: "desktop",
+          chromeMediaSourceId: videoId,
+        },
+      },
+    } as MediaStreamConstraints;
+
+    return navigator.mediaDevices.getUserMedia(constraints);
+  }
+
   useEffect(() => {
-    getVideoSources();
+    (async () => {
+      const sources = await getVideoSources();
+
+      const video = videoRef.current;
+      if (!video) return;
+
+      const stream = await buildVideoStream(sources[0].id);
+      video.srcObject = stream;
+    })();
   }, []);
 
   async function getVideoSources() {
@@ -37,6 +64,8 @@ export default function HomePage() {
     inputSources.forEach((source) => {
       setVideoSources((prev) => [...prev, { id: source.id, name: source.name }]);
     });
+
+    return inputSources;
   }
 
   async function startRecording() {
@@ -88,7 +117,6 @@ export default function HomePage() {
     if (!mediaRecorderRef.current) return;
     mediaRecorderRef.current.stop();
     setIsRecording(false);
-    console.log(recordedChunks, "chunks");
     if (!videoRef.current) return;
     videoRef.current.srcObject = null;
 
@@ -104,23 +132,23 @@ export default function HomePage() {
     }
   }
 
-  function handleSelectChange(value: string) {
+  async function handleSelectChange(value: string) {
     const source = videoSources.find((source) => source.id === value);
-    if (source) {
-      setSelectedVideoSource(source);
-    }
+    if (!source) return;
+    setSelectedVideoSource(source);
+    const video = videoRef.current;
+    if (!video) return;
+
+    const stream = await buildVideoStream(value);
+    video.srcObject = stream;
   }
 
   return (
     <>
       <div className="flex flex-col">
-        <Button
-          onClick={isRecording ? stopRecording : startRecording}
-          className={cn("mx-auto")}
-          variant={isRecording ? "destructive" : "default"}
-        >
-          {isRecording ? "Stop Recording" : "Start Recording"}
-        </Button>
+        <div className="flex justify-center">
+          <VideoTypeSelector onClick={isRecording ? stopRecording : startRecording} isRecording={isRecording} />
+        </div>
         <div className="mt-4 flex justify-center">
           {videoSources.length > 0 && (
             <Select onValueChange={handleSelectChange}>
