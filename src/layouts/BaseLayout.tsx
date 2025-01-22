@@ -8,7 +8,7 @@ export default function BaseLayout({ children }: { children: React.ReactNode }) 
     <>
       <DragWindowRegion title="electron-shadcn" />
       <Toaster />
-      <NavigationMenu />
+      {/*<NavigationMenu />*/}
       <hr />
       <main>{children}</main>
     </>
