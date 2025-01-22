@@ -1,6 +1,8 @@
 import { desktopCapturer, dialog, ipcMain } from "electron";
 import { VIDEO_GET_SOURCES, VIDEO_SAVE_FILE, VIDEO_SHOW_SAVE_DIALOG } from "./video.channels";
 import { writeFile } from "fs";
+import { homedir } from "os";
+import { join } from "path";
 
 export function addVideoEventListeners() {
   ipcMain.handle(VIDEO_GET_SOURCES, () => desktopCapturer.getSources({ types: ["window", "screen"] }));
@@ -10,10 +12,12 @@ export function addVideoEventListeners() {
       defaultPath: `vid-${Date.now()}.webm`,
     });
   });
-  ipcMain.handle(VIDEO_SAVE_FILE, async (_, filePath: string, arrayBuffer: ArrayBuffer) => {
-    console.log(arrayBuffer, "2");
+  ipcMain.handle(VIDEO_SAVE_FILE, async (_, arrayBuffer: ArrayBuffer) => {
+    const homeDir = homedir();
+    const fileName = `vid-${Date.now()}.webm`;
+    const videosPath = join(homeDir, "Videos", fileName);
     const buffer = Buffer.from(arrayBuffer);
 
-    writeFile(filePath, buffer, () => console.log("video saved successfully!"));
+    writeFile(videosPath, buffer, () => console.log("video saved successfully!"));
   });
 }

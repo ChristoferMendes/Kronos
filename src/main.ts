@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, session } from "electron";
 import registerListeners from "./helpers/ipc/listeners-register";
 // "electron-squirrel-startup" seems broken when packaging with vite
 //import started from "electron-squirrel-startup";
@@ -31,6 +31,14 @@ function createWindow() {
   } else {
     mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
   }
+
+  session.defaultSession.setPermissionRequestHandler((webContents, permission, callback) => {
+    if (permission === "media") {
+      callback(true); // Approve access for media devices
+    } else {
+      callback(false);
+    }
+  });
 }
 
 async function installExtensions() {
@@ -57,3 +65,6 @@ app.on("activate", () => {
   }
 });
 //osX only ends
+
+app.commandLine.appendSwitch("enable-usermedia-screen-capturing");
+app.commandLine.appendSwitch("enable-features=WebRTCPipeWireCapturer");

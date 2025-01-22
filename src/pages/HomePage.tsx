@@ -7,6 +7,7 @@ import { VideoSource } from "@/lib/types/video.types";
 import { cn } from "@/lib/utils";
 import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 
 const videoTypes = [
   "Daily",
@@ -90,19 +91,54 @@ export default function HomePage() {
     } as MediaStreamConstraints;
 
     try {
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      // Captura do áudio e vídeo da tela
+      const screenStream = await navigator.mediaDevices.getUserMedia(constraints);
 
+      // Captura do áudio do microfone
+      const micStream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: false,
+      });
+
+      const audioContext = new AudioContext();
+
+      // Fontes de áudio
+      const desktopAudioSource = audioContext.createMediaStreamSource(screenStream);
+      const micAudioSource = audioContext.createMediaStreamSource(micStream);
+
+      // Destino de áudio combinado
+      const destination = audioContext.createMediaStreamDestination();
+
+      // Conectar fontes de áudio ao destino
+      desktopAudioSource.connect(destination);
+      micAudioSource.connect(destination);
+
+      // Criar um novo MediaStream para combinar áudio e vídeo
+      const combinedStream = new MediaStream();
+
+      // Adicionar faixas de vídeo
+      screenStream.getVideoTracks().forEach((track) => combinedStream.addTrack(track));
+
+      // Adicionar faixas de áudio combinadas
+      destination.stream.getAudioTracks().forEach((track) => combinedStream.addTrack(track));
+
+      // Atualizar a referência de vídeo no DOM
       const video = videoRef.current;
       if (!video) return;
+      video.srcObject = combinedStream;
 
-      video.srcObject = stream;
+      // Verificar as faixas de áudio e vídeo no stream combinado
+      console.log("Combined stream tracks:", combinedStream.getTracks());
+      console.log("Audio tracks:", combinedStream.getAudioTracks());
 
-      const media = new MediaRecorder(stream, { mimeType: "video/webm; codecs=vp9,opus" });
-      mediaRecorderRef.current = media;
+      // Inicializar o MediaRecorder com o stream combinado
+      const mediaRecorder = new MediaRecorder(combinedStream, { mimeType: "video/webm; codecs=vp9,opus" });
+      mediaRecorderRef.current = mediaRecorder;
+      mediaRecorder.start(1000);
 
-      mediaRecorderRef.current.start(1000);
+      // Armazenar os dados gravados
       const localChunks: Blob[] = [];
-      mediaRecorderRef.current.ondataavailable = (e) => onDataAvailable(e, localChunks);
+      mediaRecorder.ondataavailable = (e) => onDataAvailable(e, localChunks);
       setRecordedChunks(localChunks);
     } catch (error) {
       console.error("Error capturing media:", error);
@@ -117,19 +153,13 @@ export default function HomePage() {
     if (!mediaRecorderRef.current) return;
     mediaRecorderRef.current.stop();
     setIsRecording(false);
-    if (!videoRef.current) return;
-    videoRef.current.srcObject = null;
 
-    const { canceled, filePath } = await window.video.showSaveDialog();
-    if (canceled) return;
-
-    if (filePath) {
-      const blob = new Blob(recordedChunks, {
-        type: "video/webm",
-      });
-      const arrayBuffer = await blob.arrayBuffer();
-      await window.video.saveFile(filePath, arrayBuffer);
-    }
+    const blob = new Blob(recordedChunks, {
+      type: "video/webm",
+    });
+    const arrayBuffer = await blob.arrayBuffer();
+    await window.video.saveFile(arrayBuffer);
+    toast.success("Video saved successfully!");
   }
 
   async function handleSelectChange(value: string) {
@@ -147,7 +177,9 @@ export default function HomePage() {
     <>
       <div className="flex flex-col">
         <div className="flex justify-center">
-          <VideoTypeSelector onClick={isRecording ? stopRecording : startRecording} isRecording={isRecording} />
+          <Button onClick={isRecording ? stopRecording : startRecording} className={cn("mr-4", isRecording && "bg-red-500")}>
+            {isRecording ? "Stop Recording" : "Start Recording"}
+          </Button>
         </div>
         <div className="mt-4 flex justify-center">
           {videoSources.length > 0 && (
