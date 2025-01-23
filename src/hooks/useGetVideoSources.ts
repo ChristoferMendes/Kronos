@@ -1,11 +1,11 @@
-import { useGlobalSelectedVideoSource } from "@/store/useGlobalSelectedVideoSource";
+import { useGlobalVideoSettings } from "@/store/useGlobalVideoSettings";
 import { useGlobalVideoSources } from "@/store/useGlobalVideoSources";
 import { useEffect, useState } from "react";
 
 export function useGetVideoSources() {
   const [isLoading, setIsLoading] = useState(false);
-  const { setSelectedVideoSource } = useGlobalSelectedVideoSource();
   const { setVideoSources, videoSources } = useGlobalVideoSources();
+  const { setScreen } = useGlobalVideoSettings();
 
   async function getVideoSources() {
     setIsLoading(true);
@@ -14,7 +14,6 @@ export function useGetVideoSources() {
       const isScreen = source.name.includes("screen");
       setVideoSources({ id: source.id, name: source.name, type: isScreen ? "screen" : "window" });
     });
-    setSelectedVideoSource(inputSources[0].id);
     setIsLoading(false);
   }
 
@@ -22,6 +21,12 @@ export function useGetVideoSources() {
     if (videoSources.length) return;
     getVideoSources();
   }, []);
+
+  useEffect(() => {
+    if (videoSources.length) {
+      setScreen(videoSources[0]);
+    }
+  }, [videoSources]);
 
   return { videoSources, isGetVideoSourcesLoading: isLoading };
 }

@@ -1,24 +1,30 @@
 import { buildMicAudioStream, buildVideoStream, mergeAudios } from "@/helpers/video_helpers";
-import { useGlobalSelectedVideoSource } from "@/store/useGlobalSelectedVideoSource";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
+import { useGlobalVideoSettings } from "@/store/useGlobalVideoSettings";
 
 export function useRecording() {
   const [recordedChunks, setRecordedChunks] = useState<Blob[]>([]);
   const [isRecording, setIsRecording] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const { selectedVideoSource } = useGlobalSelectedVideoSource();
+  const { screen, quality, fps, volume, isMuted } = useGlobalVideoSettings();
 
   async function startRecording() {
-    if (isRecording || !selectedVideoSource) return;
+    if (isRecording || !screen.id) return;
     setIsRecording(true);
 
-    const screenStream = await buildVideoStream(selectedVideoSource);
+    const screenStream = await buildVideoStream(screen.id, {
+      quality,
+      fps,
+      volume,
+    });
     const micStream = await buildMicAudioStream();
 
-    const combinedStream = mergeAudios(screenStream, micStream);
-    const media = new MediaRecorder(combinedStream, { mimeType: "video/webm; codecs=vp9,opus" });
-    mediaRecorderRef.current = media;
+    const combinedStream = isMuted ? screenStream : mergeAudios(screenStream, micStream);
+    mediaRecorderRef.current = new MediaRecorder(combinedStream, {
+      mimeType: "video/webm; codecs=vp9,opus",
+      videoBitsPerSecond: quality === 1080 ? 8000000 : quality === 720 ? 5000000 : 2500000,
+    });
 
     if (!screenStream.getAudioTracks().length) {
       console.error("No audio tracks found.");
@@ -47,6 +53,7 @@ export function useRecording() {
     await window.video.saveFile(arrayBuffer);
     toast.success("Video saved successfully!", {
       duration: 1000,
+      position: "top-center",
     });
   }
 

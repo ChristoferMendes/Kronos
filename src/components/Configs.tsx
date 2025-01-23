@@ -33,6 +33,50 @@ export function Config() {
     setOpenFolders((prev) => (prev.includes(folderId) ? prev.filter((id) => id !== folderId) : [...prev, folderId]));
   };
 
+  // const startRecording = useCallback(async () => {
+  //   try {
+  //     const constraints: DisplayMediaStreamConstraints = {
+  //       video: {
+  //         displaySurface: selectedScreen === "window" ? "window" : "monitor",
+  //         frameRate: { ideal: Number.parseInt(fps) },
+  //
+  //       },
+  //       audio: !isMuted,
+  //     }
+  //
+  //     const stream = await navigator.mediaDevices.getDisplayMedia(constraints)
+  //     if (videoRef.current) {
+  //       videoRef.current.srcObject = stream
+  //       videoRef.current.play()
+  //     }
+  //
+  //     const mediaRecorder = new MediaRecorder(stream, {
+  //       mimeType: `video/${outputFormat}`,
+  //       videoBitsPerSecond: recordingQuality === "1080p" ? 8000000 : recordingQuality === "720p" ? 5000000 : 2500000,
+  //     })
+  //
+  //     const chunks: Blob[] = []
+  //     mediaRecorder.ondataavailable = (event) => {
+  //       if (event.data.size > 0) {
+  //         chunks.push(event.data)
+  //       }
+  //     }
+  //
+  //     mediaRecorder.onstop = () => {
+  //       const blob = new Blob(chunks, { type: `video/${outputFormat}` })
+  //       const url = URL.createObjectURL(blob)
+  //       // Aqui você pode salvar o URL ou o blob, dependendo de como deseja lidar com a gravação
+  //       console.log("Recording finished, blob URL:", url)
+  //     }
+  //
+  //     mediaRecorder.start()
+  //     setMediaRecorder(mediaRecorder)
+  //     setIsRecording(true)
+  //   } catch (err) {
+  //     console.error("Error: " + err)
+  //   }
+  // }, [selectedScreen, fps, recordingQuality, isMuted, outputFormat])
+
   return (
     <div className="flex h-screen flex-col bg-gray-100">
       <div className="flex-1 overflow-hidden p-6">

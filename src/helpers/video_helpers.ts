@@ -1,12 +1,28 @@
-export function buildVideoStream(videoId: string) {
+interface VideoOptions {
+  fps: number;
+  quality: number;
+  volume: number;
+}
+
+export function buildVideoStream(videoId: string, options: VideoOptions) {
+  const { fps, volume, quality } = options;
+
   const constraints = {
-    audio: {
-      mandatory: {
-        chromeMediaSource: "desktop",
-      },
-    },
+    audio:
+      volume === 0
+        ? false
+        : {
+            mandatory: {
+              chromeMediaSource: "desktop",
+            },
+          },
     video: {
       mandatory: {
+        framerate: {
+          ideal: fps,
+        },
+        width: { ideal: quality === 1080 ? 1920 : quality === 720 ? 1280 : 854 },
+        height: { ideal: quality === 1080 ? 1080 : quality === 720 ? 720 : 480 },
         chromeMediaSource: "desktop",
         chromeMediaSourceId: videoId,
       },

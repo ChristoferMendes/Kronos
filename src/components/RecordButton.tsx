@@ -17,7 +17,7 @@ export function RecordButton() {
             animate={{ scale: 1, filter: "blur(0px)" }}
             exit={{ scale: 0.95, filter: "blur(8px)" }}
             transition={{
-              duration: 0.4,
+              duration: 0.2,
               ease: "easeInOut",
             }}
           >
@@ -32,11 +32,11 @@ export function RecordButton() {
             animate={{ scale: 1, filter: "blur(0px)" }}
             exit={{ scale: 0.95, filter: "blur(8px)" }}
             transition={{
-              duration: 0.4,
+              duration: 0.2,
               ease: "easeInOut",
             }}
           >
-            <Button variant="destructive"  onClick={stopRecording}>
+            <Button variant="destructive" onClick={stopRecording}>
               <Stop className="mr-2 h-4 w-4 animate-pulse" /> Stop Recording
             </Button>
           </motion.div>
