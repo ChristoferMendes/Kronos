@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { useGlobalVideoSettings } from "@/store/useGlobalVideoSettings";
 import { useGetRecordingTypes } from "@/hooks/useGetRecordingTypes";
 import { useGetRecordings } from "@/hooks/useGetRecordings";
+import { useWorkspaces } from "@/hooks/useWorkspaces";
 
 export function useRecording() {
   const [recordedChunks, setRecordedChunks] = useState<Blob[]>([]);
@@ -11,6 +12,7 @@ export function useRecording() {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const { screen, quality, fps, volume, isMuted } = useGlobalVideoSettings();
   const { selectedRecording } = useGetRecordingTypes();
+  const { selectedWorkspace } = useWorkspaces()
   const { getRecordings } = useGetRecordings();
 
   async function startRecording() {
@@ -54,7 +56,7 @@ export function useRecording() {
       type: "video/webm",
     });
     const arrayBuffer = await blob.arrayBuffer();
-    await window.video.saveFile(arrayBuffer, selectedRecording);
+    await window.video.saveFile(arrayBuffer, selectedWorkspace?.label, selectedRecording);
     await getRecordings();
     toast.success("Video saved successfully!", {
       duration: 1000,

@@ -12,6 +12,7 @@ import { ConfigButton } from "@/components/ConfigButton";
 import { Configuration } from "@/components/Configuration";
 import { useGlobalVideoSettings } from "@/store/useGlobalVideoSettings";
 import { useIsConfigOpen } from "@/hooks/useIsConfigOpen";
+import { WorkspaceSelector } from "@/components/WorkspaceSelector";
 
 export default function AboutPage() {
   const { videoSources } = useGetVideoSources();
@@ -23,7 +24,8 @@ export default function AboutPage() {
     <div className="flex h-screen flex-col bg-background">
       <Card className="relative m-4 flex-grow overflow-hidden">
         <CardContent className="flex h-full flex-col p-4">
-          <div className="mb-2 flex justify-end">
+          <div className="mb-2 flex justify-end gap-4">
+            <WorkspaceSelector />
             <ToggleTheme />
           </div>
 

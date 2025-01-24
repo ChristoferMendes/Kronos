@@ -23,14 +23,38 @@ export function addVideoEventListeners() {
       defaultPath: `vid-${Date.now()}.webm`,
     });
   });
-  ipcMain.handle(VIDEO_SAVE_FILE, async (_, arrayBuffer: ArrayBuffer, folder?: string) => {
+  ipcMain.handle(VIDEO_SAVE_FILE, async (_, arrayBuffer: ArrayBuffer, selectedWorkspace?: string, folder?: string) => {
+    console.log({
+      selectedWorkspace,
+      folder
+    })
     const homeDir = homedir();
-    if (folder) createFolderIfNotExists(join(homeDir, "Videos", folder));
+    const videosRootPath = join(homeDir, "Videos");
+    if (selectedWorkspace && folder) createFolderIfNotExists(join(videosRootPath, selectedWorkspace, folder));
+
+    if (folder) createFolderIfNotExists(join(videosRootPath, folder));
+
     const date = getVideoDateFormat();
 
+    function getFileFolder() {
+      if (selectedWorkspace && folder) {
+        return join(selectedWorkspace, folder);
+      }
+      if (folder && !selectedWorkspace) {
+        return folder;
+      }
+
+      if (selectedWorkspace) {
+        return selectedWorkspace;
+      }
+
+      return null;
+    }
+
     const fileName = folder ? `${folder}-${date}.webm` : `${date}.webm`;
-    const filePath = folder ? join(folder, fileName) : fileName;
-    const videosPath = join(homeDir, "Videos", filePath);
+    const folderPath = getFileFolder()
+    const filePath = folderPath ? join(folderPath, fileName) : fileName
+    const videosPath = join(videosRootPath, filePath);
     const buffer = Buffer.from(arrayBuffer);
 
     writeFile(videosPath, buffer, () => console.log("video saved successfully!"));

@@ -1,13 +1,14 @@
-import React from "react"
-import { AnimatePresence, motion } from "framer-motion"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import React from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Settings } from "@/components/Settings";
 import { RecordingTypeManager } from "@/components/RecordingTypeManager";
 import { useIsConfigOpen } from "@/hooks/useIsConfigOpen";
 import { RecordingList } from "@/components/RecordingList";
+import { WorkspacesManager } from "@/components/WorkspacesManager";
 
 export function Configuration() {
-  const { isConfigOpen } = useIsConfigOpen()
+  const { isConfigOpen } = useIsConfigOpen();
 
   return (
     <AnimatePresence>
@@ -17,20 +18,24 @@ export function Configuration() {
           animate={{ height: "350px", opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="bg-card border-t border-border overflow-hidden mt-4 rounded-lg"
+          className="mt-4 overflow-hidden rounded-lg border-t border-border bg-card"
         >
-          <div className="h-full p-4 overflow-y-auto">
+          <div className="h-full overflow-y-auto p-4">
             <Tabs className="w-full" defaultValue="settings">
-              <TabsList className="grid w-full grid-cols-3 mb-4">
+              <TabsList className="mb-4 grid w-full grid-cols-4">
                 <TabsTrigger value="settings">Configurations</TabsTrigger>
                 <TabsTrigger value="recordings">Recording</TabsTrigger>
+                <TabsTrigger value="workspaces">Workspaces</TabsTrigger>
                 <TabsTrigger value="types">Recording Types</TabsTrigger>
               </TabsList>
               <TabsContent value="settings">
                 <Settings />
               </TabsContent>
-              <TabsContent value="recordings" className={'mb-12'}>
+              <TabsContent value="recordings" className={"mb-12"}>
                 <RecordingList />
+              </TabsContent>
+              <TabsContent value="workspaces">
+                <WorkspacesManager />
               </TabsContent>
               <TabsContent value="types">
                 <RecordingTypeManager />
@@ -40,6 +45,5 @@ export function Configuration() {
         </motion.div>
       )}
     </AnimatePresence>
-  )
+  );
 }
-

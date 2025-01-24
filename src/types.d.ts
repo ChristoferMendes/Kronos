@@ -43,7 +43,7 @@ interface ThemeModeContext {
 interface VideoContext {
   getSources: () => Promise<VideoSource[]>;
   showSaveDialog: () => Promise<Electron.SaveDialogReturnValue>;
-  saveFile: (blob: ArrayBuffer, folder?: string) => Promise<void>;
+  saveFile: (blob: ArrayBuffer, selectedWorkspace?: string, folder?: string) => Promise<void>;
   getVideos: (recordingType: RecordingType[]) => Promise<GetVideosResponse[]>;
   deleteVideos: (selectedFiles: SelectedFile[]) => Promise<void>;
 }

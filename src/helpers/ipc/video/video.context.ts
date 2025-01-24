@@ -12,7 +12,8 @@ export function exposeVideoContext() {
   contextBridge.exposeInMainWorld("video", {
     getSources: () => ipcRenderer.invoke(VIDEO_GET_SOURCES),
     showSaveDialog: (blob: Blob) => ipcRenderer.invoke(VIDEO_SHOW_SAVE_DIALOG, blob),
-    saveFile: async (arrayBuffer: ArrayBuffer, folder: string) => ipcRenderer.invoke(VIDEO_SAVE_FILE, arrayBuffer, folder),
+    saveFile: async (arrayBuffer: ArrayBuffer, selectedWorkspace?: string, folder?: string) =>
+      ipcRenderer.invoke(VIDEO_SAVE_FILE, arrayBuffer, selectedWorkspace, folder),
     getVideos: (types: string[]) => ipcRenderer.invoke(VIDEO_GET_VIDEOS, types),
     deleteVideos: (selectedFiles: SelectedFile[]) => ipcRenderer.invoke(VIDEO_DELETE_VIDEOS, selectedFiles),
   });

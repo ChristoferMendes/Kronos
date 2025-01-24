@@ -2,6 +2,7 @@ import { existsSync, mkdirSync, readdirSync, statSync, rmSync } from "fs";
 import { extname, join } from "path";
 
 export function createFolderIfNotExists(filePath: string) {
+  console.log({ filePath });
   const exists = existsSync(filePath);
 
   if (exists) {
