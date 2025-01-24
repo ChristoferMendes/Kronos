@@ -19,7 +19,6 @@ export default function AboutPage() {
   const { videoRef } = useVideoRef(screen?.id || videoSources[0]?.id);
   const { isConfigOpen } = useIsConfigOpen();
 
-  console.log({ isConfigOpen });
   return (
     <div className="flex h-screen flex-col bg-background">
       <Card className="relative m-4 flex-grow overflow-hidden">

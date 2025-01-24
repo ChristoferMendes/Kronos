@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Settings } from "@/components/Settings";
 import { RecordingTypeManager } from "@/components/RecordingTypeManager";
 import { useIsConfigOpen } from "@/hooks/useIsConfigOpen";
+import { RecordingList } from "@/components/RecordingList";
 
 export function Configuration() {
   const { isConfigOpen } = useIsConfigOpen()
@@ -18,7 +19,7 @@ export function Configuration() {
           transition={{ duration: 0.3 }}
           className="bg-card border-t border-border overflow-hidden mt-4 rounded-lg"
         >
-          <div className="h-full p-4 overflow-hidden">
+          <div className="h-full p-4 overflow-y-auto">
             <Tabs className="w-full" defaultValue="settings">
               <TabsList className="grid w-full grid-cols-3 mb-4">
                 <TabsTrigger value="settings">Configurations</TabsTrigger>
@@ -28,8 +29,8 @@ export function Configuration() {
               <TabsContent value="settings">
                 <Settings />
               </TabsContent>
-              <TabsContent value="recordings">
-                <p>Configuration List...</p>
+              <TabsContent value="recordings" className={'mb-12'}>
+                <RecordingList />
               </TabsContent>
               <TabsContent value="types">
                 <RecordingTypeManager />

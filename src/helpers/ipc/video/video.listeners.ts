@@ -1,11 +1,12 @@
 import { desktopCapturer, dialog, ipcMain } from "electron";
-import { VIDEO_GET_SOURCES, VIDEO_SAVE_FILE, VIDEO_SHOW_SAVE_DIALOG } from "./video.channels";
-import { writeFile } from "fs";
+import { VIDEO_GET_SOURCES, VIDEO_GET_VIDEOS, VIDEO_SAVE_FILE, VIDEO_SHOW_SAVE_DIALOG } from "./video.channels";
+import { writeFile, readdirSync } from "fs";
 import { homedir } from "os";
 import { join } from "path";
 
-import { createFolderIfNotExists } from "../../../utils/server/file.utils";  //Rollup cannot import this properly with @
-import { getVideoDateFormat } from "../../../utils/server/date.utils"; //Rollup cannot import this properly with @
+import { createFolderIfNotExists, getFileInfoFromFolder } from "../../../utils/server/file.utils"; //Rollup cannot import this properly with @
+import { getVideoDateFormat } from "../../../utils/server/date.utils";
+import type { RecordingType } from "@/types/recording-types.types"; //Rollup cannot import this properly with @
 
 export function addVideoEventListeners() {
   ipcMain.handle(VIDEO_GET_SOURCES, () => desktopCapturer.getSources({ types: ["window", "screen"] }));
@@ -26,5 +27,19 @@ export function addVideoEventListeners() {
     const buffer = Buffer.from(arrayBuffer);
 
     writeFile(videosPath, buffer, () => console.log("video saved successfully!"));
+  });
+  ipcMain.handle(VIDEO_GET_VIDEOS, (_, recordingTypes: RecordingType[]) => {
+    const videosFolder = join(homedir(), "Videos");
+
+
+    return recordingTypes.map((type) => {
+      const folder = join(videosFolder, type.label);
+      const files = getFileInfoFromFolder(folder);
+
+      return {
+        ...type,
+        files,
+      };
+    });
   });
 }

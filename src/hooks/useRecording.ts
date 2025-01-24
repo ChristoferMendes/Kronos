@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { useGlobalVideoSettings } from "@/store/useGlobalVideoSettings";
 import { useGetRecordingTypes } from "@/hooks/useGetRecordingTypes";
+import { useGetRecordings } from "@/hooks/useGetRecordings";
 
 export function useRecording() {
   const [recordedChunks, setRecordedChunks] = useState<Blob[]>([]);
@@ -10,6 +11,7 @@ export function useRecording() {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const { screen, quality, fps, volume, isMuted } = useGlobalVideoSettings();
   const { selectedRecording } = useGetRecordingTypes();
+  const { getRecordings } = useGetRecordings();
 
   async function startRecording() {
     if (isRecording || !screen.id) return;
@@ -57,6 +59,7 @@ export function useRecording() {
       duration: 1000,
       position: "top-center",
     });
+    getRecordings();
   }
 
   return { startRecording, stopRecording, isRecording };
