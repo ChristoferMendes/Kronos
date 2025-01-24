@@ -4,38 +4,24 @@ import React from "react";
 import { useState } from "react";
 import { useGetRecordings } from "@/hooks/useGetRecordings";
 import { motion, AnimatePresence } from "framer-motion";
-import { FolderOpen, FolderClosed, FileVideo, Download, Trash2 } from "lucide-react";
+import { FolderOpen, FolderClosed, FileVideo, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { SelectedFile } from "@/lib/types/video.types";
+import { useSelectedFiles } from "@/hooks/useSelectedFiles";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export function RecordingList() {
-  const { recordings } = useGetRecordings();
-  const [openFolders, setOpenFolders] = useState<string[]>([]);
-  const [selectedFiles, setSelectedFiles] = useState<SelectedFile[]>([]);
-
-  const toggleFolder = (label: string) => {
-    setOpenFolders((prev) => (prev.includes(label) ? prev.filter((f) => f !== label) : [...prev, label]));
-  };
-
-  const toggleFileSelection = (label: string, fileName: string) => {
-    setSelectedFiles((prev) => {
-      const labelIndex = prev.findIndex((item) => item.label === label);
-      if (labelIndex > -1) {
-        const updatedFiles = prev[labelIndex].files.includes(fileName)
-          ? prev[labelIndex].files.filter((f) => f !== fileName)
-          : [...prev[labelIndex].files, fileName];
-
-        if (updatedFiles.length === 0) {
-          return prev.filter((item) => item.label !== label);
-        }
-
-        return [...prev.slice(0, labelIndex), { ...prev[labelIndex], files: updatedFiles }, ...prev.slice(labelIndex + 1)];
-      }
-      return [...prev, { label, files: [fileName] }];
-    });
-  };
+  const { recordings, getRecordings } = useGetRecordings();
+  const { openFolders, toggleFileSelection, toggleFolder, selectedFiles, deleteSelectedFiles } = useSelectedFiles(getRecordings);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const isFileSelected = (label: string, fileName: string) => {
     return selectedFiles.some((item) => item.label === label && item.files.includes(fileName));
@@ -47,6 +33,15 @@ export function RecordingList() {
     const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return Number.parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+  };
+
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsDeleteDialogOpen(true);
+  };
+
+  const getTotalSelectedFiles = () => {
+    return selectedFiles.reduce((total, item) => total + item.files.length, 0);
   };
 
   return (
@@ -116,10 +111,7 @@ export function RecordingList() {
                       </div>
                       <div className="flex flex-shrink-0 items-center space-x-2">
                         <span className="text-xs text-muted-foreground">{formatFileSize(file.fileSizeInBytes)}</span>
-                        <Button variant="ghost" size="icon" onClick={(e) => e.stopPropagation()}>
-                          <Download className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="icon" onClick={(e) => e.stopPropagation()}>
+                        <Button variant="destructive" size="icon" onClick={handleDeleteClick}>
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -131,6 +123,27 @@ export function RecordingList() {
           </CardContent>
         </Card>
       ))}
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent>
+          <DialogTitle>Delete Selected Files</DialogTitle>
+          <DialogDescription>You are about to delete {getTotalSelectedFiles()} files. Are you sure?</DialogDescription>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
+                No
+              </Button>
+            </DialogClose>
+            <Button
+              onClick={async () => {
+                setIsDeleteDialogOpen(false);
+                await deleteSelectedFiles();
+              }}
+            >
+              Yes
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

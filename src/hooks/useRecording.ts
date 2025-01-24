@@ -55,11 +55,12 @@ export function useRecording() {
     });
     const arrayBuffer = await blob.arrayBuffer();
     await window.video.saveFile(arrayBuffer, selectedRecording);
+    await getRecordings();
     toast.success("Video saved successfully!", {
       duration: 1000,
       position: "top-center",
     });
-    getRecordings();
+
   }
 
   return { startRecording, stopRecording, isRecording };

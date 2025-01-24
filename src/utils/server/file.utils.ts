@@ -1,9 +1,8 @@
-import { existsSync, mkdirSync, readdirSync, statSync } from "fs";
+import { existsSync, mkdirSync, readdirSync, statSync, rmSync } from "fs";
 import { extname, join } from "path";
 
 export function createFolderIfNotExists(filePath: string) {
   const exists = existsSync(filePath);
-  console.log({ exists });
 
   if (exists) {
     return;
@@ -22,4 +21,8 @@ export function getFileInfoFromFolder(route: string) {
     response.push({ name: file, extension, fileSizeInBytes });
   }
   return response;
+}
+
+export function deleteFile(filePath: string) {
+  rmSync(filePath);
 }

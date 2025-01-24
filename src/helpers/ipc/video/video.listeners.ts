@@ -1,12 +1,19 @@
 import { desktopCapturer, dialog, ipcMain } from "electron";
-import { VIDEO_GET_SOURCES, VIDEO_GET_VIDEOS, VIDEO_SAVE_FILE, VIDEO_SHOW_SAVE_DIALOG } from "./video.channels";
-import { writeFile, readdirSync } from "fs";
+import {
+  VIDEO_DELETE_VIDEOS,
+  VIDEO_GET_SOURCES,
+  VIDEO_GET_VIDEOS,
+  VIDEO_SAVE_FILE,
+  VIDEO_SHOW_SAVE_DIALOG,
+} from "./video.channels";
+import { writeFile } from "fs";
 import { homedir } from "os";
 import { join } from "path";
 
-import { createFolderIfNotExists, getFileInfoFromFolder } from "../../../utils/server/file.utils"; //Rollup cannot import this properly with @
+import { createFolderIfNotExists, deleteFile, getFileInfoFromFolder } from "../../../utils/server/file.utils"; //Rollup cannot import this properly with @
 import { getVideoDateFormat } from "../../../utils/server/date.utils";
-import type { RecordingType } from "@/types/recording-types.types"; //Rollup cannot import this properly with @
+import type { RecordingType } from "@/types/recording-types.types";
+import { SelectedFile } from "@/lib/types/video.types"; //Rollup cannot import this properly with @
 
 export function addVideoEventListeners() {
   ipcMain.handle(VIDEO_GET_SOURCES, () => desktopCapturer.getSources({ types: ["window", "screen"] }));
@@ -31,7 +38,6 @@ export function addVideoEventListeners() {
   ipcMain.handle(VIDEO_GET_VIDEOS, (_, recordingTypes: RecordingType[]) => {
     const videosFolder = join(homedir(), "Videos");
 
-
     return recordingTypes.map((type) => {
       const folder = join(videosFolder, type.label);
       const files = getFileInfoFromFolder(folder);
@@ -41,5 +47,15 @@ export function addVideoEventListeners() {
         files,
       };
     });
+  });
+  ipcMain.handle(VIDEO_DELETE_VIDEOS, async (_, selectedFiles: SelectedFile[]) => {
+    const videosFolder = join(homedir(), "Videos");
+
+    for (const route of selectedFiles) {
+      for (const file of route.files) {
+        const path = join(videosFolder, route.label, file);
+        deleteFile(path);
+      }
+    }
   });
 }

@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useGetRecordingTypes } from "@/hooks/useGetRecordingTypes";
-import { GetVideosResponse } from "@/lib/types/video.types";
+import { useGlobalRecordings } from "@/store/useGlobalRecordings";
 
 export function useGetRecordings() {
-  const [recordings, setRecordings] = useState<GetVideosResponse[]>([]);
+  const { recordings, setRecordings } = useGlobalRecordings();
   const { recordingTypes } = useGetRecordingTypes();
 
   async function getRecordings() {
