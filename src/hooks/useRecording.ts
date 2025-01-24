@@ -2,12 +2,14 @@ import { buildMicAudioStream, buildVideoStream, mergeAudios } from "@/helpers/vi
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { useGlobalVideoSettings } from "@/store/useGlobalVideoSettings";
+import { useGetRecordingTypes } from "@/hooks/useGetRecordingTypes";
 
 export function useRecording() {
   const [recordedChunks, setRecordedChunks] = useState<Blob[]>([]);
   const [isRecording, setIsRecording] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const { screen, quality, fps, volume, isMuted } = useGlobalVideoSettings();
+  const { selectedRecording } = useGetRecordingTypes();
 
   async function startRecording() {
     if (isRecording || !screen.id) return;
@@ -50,7 +52,7 @@ export function useRecording() {
       type: "video/webm",
     });
     const arrayBuffer = await blob.arrayBuffer();
-    await window.video.saveFile(arrayBuffer);
+    await window.video.saveFile(arrayBuffer, selectedRecording);
     toast.success("Video saved successfully!", {
       duration: 1000,
       position: "top-center",

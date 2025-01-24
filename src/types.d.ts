@@ -21,7 +21,7 @@ interface ThemeModeContext {
 interface VideoContext {
   getSources: () => Promise<VideoSource[]>;
   showSaveDialog: () => Promise<Electron.SaveDialogReturnValue>;
-  saveFile: (blob: ArrayBuffer) => Promise<void>;
+  saveFile: (blob: ArrayBuffer, folder?: string) => Promise<void>;
 }
 interface ElectronWindow {
   minimize: () => Promise<void>;

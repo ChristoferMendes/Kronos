@@ -10,15 +10,16 @@ import { RecordingTypesList } from "@/components/RecordingTypesList";
 import { RecordButton } from "@/components/RecordButton";
 import { ConfigButton } from "@/components/ConfigButton";
 import { Configuration } from "@/components/Configuration";
-import { useGlobalIsConfigOpen } from "@/store/useGlobalIsConfigOpen";
 import { useGlobalVideoSettings } from "@/store/useGlobalVideoSettings";
+import { useIsConfigOpen } from "@/hooks/useIsConfigOpen";
 
 export default function AboutPage() {
   const { videoSources } = useGetVideoSources();
   const { screen } = useGlobalVideoSettings();
   const { videoRef } = useVideoRef(screen?.id || videoSources[0]?.id);
-  const { isConfigOpen } = useGlobalIsConfigOpen();
+  const { isConfigOpen } = useIsConfigOpen();
 
+  console.log({ isConfigOpen });
   return (
     <div className="flex h-screen flex-col bg-background">
       <Card className="relative m-4 flex-grow overflow-hidden">

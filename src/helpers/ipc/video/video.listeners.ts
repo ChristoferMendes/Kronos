@@ -4,6 +4,9 @@ import { writeFile } from "fs";
 import { homedir } from "os";
 import { join } from "path";
 
+import { createFolderIfNotExists } from "../../../utils/server/file.utils";  //Rollup cannot import this properly with @
+import { getVideoDateFormat } from "../../../utils/server/date.utils"; //Rollup cannot import this properly with @
+
 export function addVideoEventListeners() {
   ipcMain.handle(VIDEO_GET_SOURCES, () => desktopCapturer.getSources({ types: ["window", "screen"] }));
   ipcMain.handle(VIDEO_SHOW_SAVE_DIALOG, async () => {
@@ -12,10 +15,14 @@ export function addVideoEventListeners() {
       defaultPath: `vid-${Date.now()}.webm`,
     });
   });
-  ipcMain.handle(VIDEO_SAVE_FILE, async (_, arrayBuffer: ArrayBuffer) => {
+  ipcMain.handle(VIDEO_SAVE_FILE, async (_, arrayBuffer: ArrayBuffer, folder?: string) => {
     const homeDir = homedir();
-    const fileName = `vid-${Date.now()}.webm`;
-    const videosPath = join(homeDir, "Videos", fileName);
+    if (folder) createFolderIfNotExists(join(homeDir, "Videos", folder));
+    const date = getVideoDateFormat();
+
+    const fileName = folder ? `${folder}-${date}.webm` : `${date}.webm`;
+    const filePath = folder ? join(folder, fileName) : fileName;
+    const videosPath = join(homeDir, "Videos", filePath);
     const buffer = Buffer.from(arrayBuffer);
 
     writeFile(videosPath, buffer, () => console.log("video saved successfully!"));

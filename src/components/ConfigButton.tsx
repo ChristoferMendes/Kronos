@@ -2,10 +2,10 @@ import React from "react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { Cog } from "lucide-react";
-import { useGlobalIsConfigOpen } from "@/store/useGlobalIsConfigOpen";
+import { useIsConfigOpen } from "@/hooks/useIsConfigOpen";
 
 export function ConfigButton() {
-  const { setIsConfigOpen, isConfigOpen } = useGlobalIsConfigOpen();
+  const { setIsConfigOpen, isConfigOpen } = useIsConfigOpen();
 
   return (
     <TooltipProvider delayDuration={300}>

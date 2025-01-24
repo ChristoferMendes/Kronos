@@ -16,6 +16,9 @@ export default defineConfig((env) => {
     base: "./",
     build: {
       outDir: `.vite/renderer/${name}`,
+      rollupOptions: {
+        external: ['@/utils/server/date.utils'],
+      },
     },
     plugins: [
       pluginExposeRenderer(name),

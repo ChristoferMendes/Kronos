@@ -5,6 +5,6 @@ export function exposeVideoContext() {
   contextBridge.exposeInMainWorld("video", {
     getSources: () => ipcRenderer.invoke(VIDEO_GET_SOURCES),
     showSaveDialog: (blob: Blob) => ipcRenderer.invoke(VIDEO_SHOW_SAVE_DIALOG, blob),
-    saveFile: async (arrayBuffer: ArrayBuffer) => ipcRenderer.invoke(VIDEO_SAVE_FILE, arrayBuffer),
+    saveFile: async (arrayBuffer: ArrayBuffer, folder: string) => ipcRenderer.invoke(VIDEO_SAVE_FILE, arrayBuffer, folder),
   });
 }

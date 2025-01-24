@@ -1,12 +1,12 @@
 import React from "react"
-import { useGlobalIsConfigOpen } from "@/store/useGlobalIsConfigOpen"
 import { AnimatePresence, motion } from "framer-motion"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Settings } from "@/components/Settings";
 import { RecordingTypeManager } from "@/components/RecordingTypeManager";
+import { useIsConfigOpen } from "@/hooks/useIsConfigOpen";
 
 export function Configuration() {
-  const { isConfigOpen } = useGlobalIsConfigOpen()
+  const { isConfigOpen } = useIsConfigOpen()
 
   return (
     <AnimatePresence>

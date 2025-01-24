@@ -3,7 +3,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label";
 import React from "react";
 import { useGlobalVideoSources } from "@/store/useGlobalVideoSources";
-import { FileAudioIcon, HeadphoneOffIcon, HeadphonesIcon, Mic, MicOff } from "lucide-react";
+import { HeadphoneOffIcon, HeadphonesIcon, Mic, MicOff } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 
@@ -21,10 +21,10 @@ export function Settings() {
             if (!screen) return;
             setScreen(screen);
           }}
-          defaultValue={videoSources?.[0].id}
+          defaultValue={videoSources[0]?.id}
         >
           <SelectTrigger>
-            <SelectValue placeholder={videoSources?.[0].name} />
+            <SelectValue placeholder={videoSources[0]?.name} />
           </SelectTrigger>
           <SelectContent>
             {videoSources?.map((video) => (

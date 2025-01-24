@@ -3,11 +3,13 @@ import type { RecordingType } from "@/types/recording-types.types";
 import { toast } from "sonner";
 
 const key = "getRecordingTypes";
+const selectedKey = "selectedRecordingType";
 
 export function useGetRecordingTypes() {
   const [recordingTypes, setRecordingTypes] = useLocalStorageState<RecordingType[]>(key, {
     defaultValue: [],
   });
+  const [selectedRecording, setSelectedRecording] = useLocalStorageState<string>(selectedKey)
 
   function createRecord(recordingType: RecordingType) {
     const existingRecordingType = recordingTypes.find((item) => item.label === recordingType.label);
@@ -25,9 +27,12 @@ export function useGetRecordingTypes() {
     setRecordingTypes(newRecordingType);
   }
 
+
   return {
     createRecord,
     deleteRecord,
     recordingTypes,
+    setSelectedRecording,
+    selectedRecording,
   };
 }

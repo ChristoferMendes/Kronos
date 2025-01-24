@@ -4,13 +4,12 @@ import React from "react";
 import { useGetRecordingTypes } from "@/hooks/useGetRecordingTypes";
 
 export function RecordingTypesList() {
-  const { recordingTypes } = useGetRecordingTypes();
+  const { recordingTypes, setSelectedRecording, selectedRecording } = useGetRecordingTypes();
 
   return (
     <div className="flex items-center space-x-2">
       <Label>Recording Type:</Label>
-      <Select>
-        <SelectTrigger className="w-[180px]">
+      <Select onValueChange={setSelectedRecording} defaultValue={selectedRecording}>        <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="Select type" />
         </SelectTrigger>
         <SelectContent>
