@@ -3,6 +3,7 @@ import { useGlobalIsConfigOpen } from "@/store/useGlobalIsConfigOpen"
 import { AnimatePresence, motion } from "framer-motion"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Settings } from "@/components/Settings";
+import { RecordingTypeManager } from "@/components/RecordingTypeManager";
 
 export function Configuration() {
   const { isConfigOpen } = useGlobalIsConfigOpen()
@@ -28,10 +29,10 @@ export function Configuration() {
                 <Settings />
               </TabsContent>
               <TabsContent value="recordings">
-                <p>Lista de gravações aqui</p>
+                <p>Configuration List...</p>
               </TabsContent>
               <TabsContent value="types">
-                <p>Gerenciamento de tipos de gravação aqui</p>
+                <RecordingTypeManager />
               </TabsContent>
             </Tabs>
           </div>

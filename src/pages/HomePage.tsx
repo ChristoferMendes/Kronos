@@ -127,11 +127,6 @@ export default function HomePage() {
       if (!video) return;
       video.srcObject = combinedStream;
 
-      // Verificar as faixas de áudio e vídeo no stream combinado
-      console.log("Combined stream tracks:", combinedStream.getTracks());
-      console.log("Audio tracks:", combinedStream.getAudioTracks());
-
-      // Inicializar o MediaRecorder com o stream combinado
       const mediaRecorder = new MediaRecorder(combinedStream, { mimeType: "video/webm; codecs=vp9,opus" });
       mediaRecorderRef.current = mediaRecorder;
       mediaRecorder.start(1000);
