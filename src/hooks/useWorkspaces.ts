@@ -15,7 +15,7 @@ export function useWorkspaces() {
   }
 
   function deleteWorkspace(label: string) {
-    const newWorkspaces = workspaces.filter((w) => w.label === label);
+    const newWorkspaces = workspaces.filter((w) => w.label !== label);
 
     setWorkspaces(newWorkspaces);
   }
