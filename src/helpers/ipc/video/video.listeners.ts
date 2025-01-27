@@ -11,9 +11,9 @@ import { homedir } from "os";
 import { join } from "path";
 
 import { createFolderIfNotExists, deleteFile, getFileInfoFromFolder } from "../../../utils/server/file.utils"; //Rollup cannot import this properly with @
-import { getVideoDateFormat } from "../../../utils/server/date.utils";
+import { getVideoDateFormat } from "../../../utils/server/date.utils"; //Rollup cannot import this properly with @
 import type { RecordingType } from "@/types/recording-types.types";
-import { SelectedFile } from "@/lib/types/video.types"; //Rollup cannot import this properly with @
+import { SelectedFile } from "@/lib/types/video.types";
 
 export function addVideoEventListeners() {
   ipcMain.handle(VIDEO_GET_SOURCES, () => desktopCapturer.getSources({ types: ["window", "screen"] }));
@@ -24,10 +24,6 @@ export function addVideoEventListeners() {
     });
   });
   ipcMain.handle(VIDEO_SAVE_FILE, async (_, arrayBuffer: ArrayBuffer, selectedWorkspace?: string, folder?: string) => {
-    console.log({
-      selectedWorkspace,
-      folder
-    })
     const homeDir = homedir();
     const videosRootPath = join(homeDir, "Videos");
     if (selectedWorkspace && folder) createFolderIfNotExists(join(videosRootPath, selectedWorkspace, folder));
@@ -52,15 +48,15 @@ export function addVideoEventListeners() {
     }
 
     const fileName = folder ? `${folder}-${date}.webm` : `${date}.webm`;
-    const folderPath = getFileFolder()
-    const filePath = folderPath ? join(folderPath, fileName) : fileName
+    const folderPath = getFileFolder();
+    const filePath = folderPath ? join(folderPath, fileName) : fileName;
     const videosPath = join(videosRootPath, filePath);
     const buffer = Buffer.from(arrayBuffer);
 
     writeFile(videosPath, buffer, () => console.log("video saved successfully!"));
   });
-  ipcMain.handle(VIDEO_GET_VIDEOS, (_, recordingTypes: RecordingType[]) => {
-    const videosFolder = join(homedir(), "Videos");
+  ipcMain.handle(VIDEO_GET_VIDEOS, (_, recordingTypes: RecordingType[], selectedWorkspace?: string) => {
+    const videosFolder = selectedWorkspace ? join(homedir(), "Videos", selectedWorkspace) : join(homedir(), "Videos");
 
     return recordingTypes.map((type) => {
       const folder = join(videosFolder, type.label);

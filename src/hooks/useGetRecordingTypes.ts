@@ -22,6 +22,12 @@ export function useGetRecordingTypes() {
   }
 
   function deleteRecord(label: string) {
+    const isSelected = label === selectedRecording;
+
+    if (isSelected) {
+      setSelectedRecording(undefined)
+    }
+
     const newRecordingType = recordingTypes.filter((recordingType) => recordingType.label !== label);
 
     setRecordingTypes(newRecordingType);

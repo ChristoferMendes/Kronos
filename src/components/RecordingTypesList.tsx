@@ -12,7 +12,7 @@ export function RecordingTypesList() {
     <div className="relative flex items-center space-x-2">
       <Label>Recording Type:</Label>
 
-      <Select onValueChange={setSelectedRecording} defaultValue={selectedRecording}>
+      <Select onValueChange={setSelectedRecording} value={selectedRecording} key={selectedRecording}>
         {" "}
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="Select type" />

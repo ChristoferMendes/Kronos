@@ -44,7 +44,7 @@ interface VideoContext {
   getSources: () => Promise<VideoSource[]>;
   showSaveDialog: () => Promise<Electron.SaveDialogReturnValue>;
   saveFile: (blob: ArrayBuffer, selectedWorkspace?: string, folder?: string) => Promise<void>;
-  getVideos: (recordingType: RecordingType[]) => Promise<GetVideosResponse[]>;
+  getVideos: (recordingType: RecordingType[], selectedWorkspace?: string) => Promise<GetVideosResponse[]>;
   deleteVideos: (selectedFiles: SelectedFile[]) => Promise<void>;
 }
 

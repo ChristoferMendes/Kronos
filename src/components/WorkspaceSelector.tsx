@@ -12,7 +12,7 @@ export function WorkspaceSelector() {
       <Label>
         Workspace type:
       </Label>
-      <Select onValueChange={selectWorkspace} defaultValue={selectedWorkspace?.label}>
+      <Select onValueChange={selectWorkspace} value={selectedWorkspace?.label} key={selectedWorkspace?.label}>
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="Select Workspace" />
         </SelectTrigger>

@@ -14,7 +14,7 @@ export function exposeVideoContext() {
     showSaveDialog: (blob: Blob) => ipcRenderer.invoke(VIDEO_SHOW_SAVE_DIALOG, blob),
     saveFile: async (arrayBuffer: ArrayBuffer, selectedWorkspace?: string, folder?: string) =>
       ipcRenderer.invoke(VIDEO_SAVE_FILE, arrayBuffer, selectedWorkspace, folder),
-    getVideos: (types: string[]) => ipcRenderer.invoke(VIDEO_GET_VIDEOS, types),
+    getVideos: (types: string[], selectedWorkspace?: string) => ipcRenderer.invoke(VIDEO_GET_VIDEOS, types, selectedWorkspace),
     deleteVideos: (selectedFiles: SelectedFile[]) => ipcRenderer.invoke(VIDEO_DELETE_VIDEOS, selectedFiles),
   });
 }
