@@ -2,7 +2,6 @@ import { existsSync, mkdirSync, readdirSync, statSync, rmSync } from "fs";
 import { extname, join } from "path";
 
 export function createFolderIfNotExists(filePath: string) {
-  console.log({ filePath });
   const exists = existsSync(filePath);
 
   if (exists) {
@@ -13,7 +12,7 @@ export function createFolderIfNotExists(filePath: string) {
 }
 
 export function getFileInfoFromFolder(route: string) {
-  const files = readdirSync(route, 'utf8');
+  const files = readdirSync(route, "utf8");
   const response = [];
   for (const file of files) {
     const extension = extname(file);

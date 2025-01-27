@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useWorkspaces } from "@/hooks/useWorkspaces";
 import { Label } from "@/components/ui/label";
@@ -6,12 +6,9 @@ import { Label } from "@/components/ui/label";
 export function WorkspaceSelector() {
   const { workspaces, selectedWorkspace, selectWorkspace } = useWorkspaces();
 
-  console.log({ workspaces });
   return (
     <div className="relative flex items-center space-x-2">
-      <Label>
-        Workspace type:
-      </Label>
+      <Label>Workspace type:</Label>
       <Select onValueChange={selectWorkspace} value={selectedWorkspace?.label} key={selectedWorkspace?.label}>
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="Select Workspace" />
@@ -28,6 +25,5 @@ export function WorkspaceSelector() {
         </SelectContent>
       </Select>
     </div>
-
-  )
+  );
 }
