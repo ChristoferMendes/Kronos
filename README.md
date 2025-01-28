@@ -35,8 +35,8 @@ Start capturing your screen in seconds with a intuitive interface
 | YouTube Upload        | In Progress  |
 | Output Formats        | Planned      |
 | AI Clip Analysis      | Planned      |
-| Cloud Sync            | Roadmap      |
 | Transcript Generation | Planned      |
+| Cloud Sync            | Roadmap      |
 
 
 
