@@ -2,7 +2,7 @@
 
 ![kronos](https://github.com/user-attachments/assets/b9881fb0-d063-4213-b812-a378e731369c)
 
-### A minimalist desktop video recorder with smart organization capabilities. Built for creators who value simplicity and efficiency.
+A minimalist desktop video recorder with smart organization capabilities. Built for creators who value simplicity and efficiency.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
