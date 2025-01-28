@@ -27,8 +27,7 @@ export function addVideoEventListeners() {
     const homeDir = homedir();
     const videosRootPath = join(homeDir, "Videos");
     if (selectedWorkspace && folder) createFolderIfNotExists(join(videosRootPath, selectedWorkspace, folder));
-
-    if (folder) createFolderIfNotExists(join(videosRootPath, folder));
+    if (!selectedWorkspace && folder) createFolderIfNotExists(join(videosRootPath, folder));
 
     const date = getVideoDateFormat();
 
