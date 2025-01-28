@@ -12,7 +12,7 @@ export function useRecording() {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const { screen, quality, fps, volume, isMuted } = useGlobalVideoSettings();
   const { selectedRecording } = useGetRecordingTypes();
-  const { selectedWorkspace } = useWorkspaces()
+  const { selectedWorkspace } = useWorkspaces();
   const { getRecordings } = useGetRecordings();
 
   async function startRecording() {
@@ -47,8 +47,12 @@ export function useRecording() {
     localChunks.push(e.data);
   }
 
+  async function sleep(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
   async function stopRecording() {
     if (!mediaRecorderRef.current) return;
+    await sleep(2000);
     mediaRecorderRef.current.stop();
     setIsRecording(false);
 
@@ -58,12 +62,17 @@ export function useRecording() {
     const arrayBuffer = await blob.arrayBuffer();
     await window.video.saveFile(arrayBuffer, selectedWorkspace?.label, selectedRecording);
     await getRecordings();
-    toast.success("Video saved successfully!", {
+  }
+
+  function handleStopRecordingToast() {
+    toast.promise(stopRecording, {
+      loading: "Saving...",
+      success: "Video saved successfully!",
+      error: "Failed to save video!",
       duration: 1000,
       position: "top-center",
     });
-
   }
 
-  return { startRecording, stopRecording, isRecording };
+  return { startRecording, stopRecording: handleStopRecordingToast, isRecording };
 }
