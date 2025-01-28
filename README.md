@@ -1,23 +1,28 @@
-# Kronos
+# Kronos 🕒
 
 ![kronos](https://github.com/user-attachments/assets/b9881fb0-d063-4213-b812-a378e731369c)
 
-## Description
+### A minimalist desktop video recorder with smart organization capabilities. Built for creators who value simplicity and efficiency.
 
-Kronos is a tool to record desktop videos and organize them into pre-defined folders, created by the user.
-The focus is to have a minimalistic interface and to be easy to use.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-## Features
+## 🌟 Why Kronos?
 
-- Record desktop videos
-- Organization of videos into folders
-- Youtube Upload (WIP)
-- AI Integration (WIP)
+Kronos eliminates clutter and complexity from screen recording. Designed with a "less is more" philosophy, it helps you:
+- Capture your screen instantly
+- Auto-organize recordings with custom rules
+- Focus on content creation instead of file management
 
-## Contributing
+## 🚀 Features
 
-1. Fork it
-2. Install dependencies: `npm install`
-3. Run the app: `npm start`
-4. Create your feature branch: `git checkout -b my-new-feature`
-5. Commit your changes: `git commit -m 'feat: add some feature'`
+### 📹  One-Click Recording
+Start capturing your screen in seconds with a intuitive interface
+
+### 🗂 Smart Organization
+```bash
+📂 Videos/
+├── 📁 ProjectAlpha
+│   ├── 📁 Design
+├── 📁 ClientPresentations
+└── 📁 Tutorials
