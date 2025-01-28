@@ -26,3 +26,29 @@ Start capturing your screen in seconds with a intuitive interface
 │   ├── 📁 Design
 ├── 📁 ClientPresentations
 └── 📁 Tutorials
+```
+
+## ⚙️ Feature Roadmap
+
+| Feature               | Status       |
+|-----------------------|--------------|
+| YouTube Upload        | In Progress  |
+| Output Formats        | Planned      |
+| AI Clip Analysis      | Planned      |
+| Cloud Sync            | Roadmap      |
+| Transcript Generation | Planned      |
+
+
+
+## 🤝 Contributing
+
+- Fork the repository
+- Clone the forked repository
+- Install dependencies
+```bash
+npm install
+```
+- Start the app
+```bash
+npm start
+```
