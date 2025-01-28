@@ -1,5 +1,7 @@
 # Kronos
 
+![kronos](https://github.com/user-attachments/assets/b9881fb0-d063-4213-b812-a378e731369c)
+
 ## Description
 
 Kronos is a tool to record desktop videos and organize them into pre-defined folders, created by the user.
