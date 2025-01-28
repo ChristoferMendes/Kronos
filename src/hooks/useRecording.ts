@@ -47,12 +47,8 @@ export function useRecording() {
     localChunks.push(e.data);
   }
 
-  async function sleep(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
   async function stopRecording() {
     if (!mediaRecorderRef.current) return;
-    await sleep(2000);
     mediaRecorderRef.current.stop();
     setIsRecording(false);
 
