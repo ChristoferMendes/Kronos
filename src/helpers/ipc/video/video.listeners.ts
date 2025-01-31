@@ -10,7 +10,11 @@ import { writeFile } from "fs";
 import { homedir } from "os";
 import { join } from "path";
 
-import { createFolderIfNotExists, deleteFile, getFileInfoFromFolder } from "../../../utils/server/file.utils"; //Rollup cannot import this properly with @
+import {
+  createFolderIfNotExists,
+  deleteFile,
+  getFileInfoFromFolder as getFilesInfoFromFolder,
+} from "../../../utils/server/file.utils"; //Rollup cannot import this properly with @
 import { getVideoDateFormat } from "../../../utils/server/date.utils"; //Rollup cannot import this properly with @
 import type { RecordingType } from "@/types/recording-types.types";
 import { SelectedFile } from "@/lib/types/video.types";
@@ -59,7 +63,7 @@ export function addVideoEventListeners() {
 
     return recordingTypes.map((type) => {
       const folder = join(videosFolder, type.label);
-      const files = getFileInfoFromFolder(folder);
+      const files = getFilesInfoFromFolder(folder);
 
       return {
         ...type,
