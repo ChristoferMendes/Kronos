@@ -46,6 +46,7 @@ interface VideoContext {
   saveFile: (blob: ArrayBuffer, selectedWorkspace?: string, folder?: string) => Promise<void>;
   getVideos: (recordingType: RecordingType[], selectedWorkspace?: string) => Promise<GetVideosResponse[]>;
   deleteVideos: (selectedFiles: SelectedFile[]) => Promise<void>;
+  deleteFolder: (path: string) => Promise<void>;
 }
 
 interface ElectronWindow {

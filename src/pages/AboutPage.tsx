@@ -13,6 +13,7 @@ import { Configuration } from "@/components/Configuration";
 import { useGlobalVideoSettings } from "@/store/useGlobalVideoSettings";
 import { useIsConfigOpen } from "@/hooks/useIsConfigOpen";
 import { WorkspaceSelector } from "@/components/WorkspaceSelector";
+import { RecordingCounter } from "@/components/RecordingCounter";
 
 export default function AboutPage() {
   const { videoSources } = useGetVideoSources();
@@ -37,11 +38,16 @@ export default function AboutPage() {
             transition={{ duration: 0.3 }}
           >
             <div className="mb-4">
-              <div className="flex items-center justify-between">
-                <RecordingTypesList />
-                <div className="flex items-center space-x-2">
-                  <RecordButton />
-                  <ConfigButton />
+              <div className="flex items-start justify-between">
+                <div className="flex items-center">
+                  <RecordingTypesList />
+                </div>
+                <div className="flex flex-col items-end gap-2">
+                  <div className="flex items-center space-x-2">
+                    <RecordButton />
+                    <ConfigButton />
+                  </div>
+                  <RecordingCounter />
                 </div>
               </div>
             </div>

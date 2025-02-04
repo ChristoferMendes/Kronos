@@ -11,7 +11,8 @@ export function useVideoRef(defaultVideoId: string | null) {
     const stream = await buildVideoStream(videoId, {
       volume: 0,
       quality: 1080,
-      fps: 60
+      fps: 60,
+      type: "screen",
     });
     video.srcObject = stream;
   }

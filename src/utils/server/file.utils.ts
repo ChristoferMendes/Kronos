@@ -34,3 +34,7 @@ export function getFileInfoFromFolder(route: string): VideoInfo[] {
 export function deleteFile(filePath: string) {
   rmSync(filePath);
 }
+
+export function deleteFolder(folderPath: string) {
+  rmSync(folderPath, { recursive: true, force: true });
+}

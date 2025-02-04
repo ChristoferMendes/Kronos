@@ -1,5 +1,6 @@
 import { desktopCapturer, dialog, ipcMain } from "electron";
 import {
+  VIDEO_DELETE_FOLDER,
   VIDEO_DELETE_VIDEOS,
   VIDEO_GET_SOURCES,
   VIDEO_GET_VIDEOS,
@@ -13,6 +14,7 @@ import { join } from "path";
 import {
   createFolderIfNotExists,
   deleteFile,
+  deleteFolder,
   getFileInfoFromFolder as getFilesInfoFromFolder,
 } from "../../../utils/server/file.utils"; //Rollup cannot import this properly with @
 import { getVideoDateFormat } from "../../../utils/server/date.utils"; //Rollup cannot import this properly with @
@@ -80,5 +82,10 @@ export function addVideoEventListeners() {
         deleteFile(path);
       }
     }
+  });
+  ipcMain.handle(VIDEO_DELETE_FOLDER, async (_, path: string) => {
+    const videosFolder = join(homedir(), "Videos");
+    const folderPath = join(videosFolder, path);
+    deleteFolder(folderPath);
   });
 }

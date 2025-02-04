@@ -1,6 +1,5 @@
 import useLocalStorageState from "use-local-storage-state";
 import { Workspace } from "@/lib/types/workspace.types";
-import { useGetRecordings } from "@/hooks/useGetRecordings";
 import { useGlobalRecordings } from "@/store/useGlobalRecordings";
 import { useGetRecordingTypes } from "@/hooks/useGetRecordingTypes";
 
@@ -25,8 +24,6 @@ export function useWorkspaces() {
       setSelectedWorkspace(undefined);
     }
     const newWorkspaces = workspaces.filter((w) => w.label !== label);
-
-
     setWorkspaces(newWorkspaces);
   }
 
@@ -38,21 +35,32 @@ export function useWorkspaces() {
   }
 
 
-  function selectWorkspace(newWorkspace: string) {
-    const workspace = workspaces.find(({ label }) => label === newWorkspace);
-    if (!workspace) return;
-    setSelectedWorkspace(workspace);
+  function selectWorkspace(newWorkspace: Workspace) {
+    setSelectedWorkspace(newWorkspace);
     getRecordings();
+  }
+
+  function clearSelectedWorkspace() {
+    setSelectedWorkspace(undefined);
+  }
+
+  function updateWorkspace(label: string, updatedWorkspace: Workspace) {
+    const updatedWorkspaces = workspaces.map((w) => w.label === label ? updatedWorkspace : w);
+    setWorkspaces(updatedWorkspaces);
+  }
+
+  async function deleteWorkspaceFolder(label: string) {
+    const { video } = window;
+    await video.deleteFolder(label);
   }
 
   return {
     workspaces,
     selectedWorkspace,
     createWorkspace,
-
-
-
-    selectWorkspace,
-    deleteWorkspace
+    clearSelectedWorkspace,
+    selectWorkspace,    deleteWorkspace,
+    updateWorkspace,
+    deleteWorkspaceFolder
   };
 }

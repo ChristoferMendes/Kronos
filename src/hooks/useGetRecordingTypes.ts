@@ -9,7 +9,9 @@ export function useGetRecordingTypes() {
   const [recordingTypes, setRecordingTypes] = useLocalStorageState<RecordingType[]>(key, {
     defaultValue: [],
   });
-  const [selectedRecording, setSelectedRecording] = useLocalStorageState<string>(selectedKey)
+  const [selectedType, setSelectedType] = useLocalStorageState<RecordingType | null>(selectedKey, {
+    defaultValue: null,
+  })
 
   function createRecord(recordingType: RecordingType) {
     const existingRecordingType = recordingTypes.find((item) => item.label === recordingType.label);
@@ -22,10 +24,10 @@ export function useGetRecordingTypes() {
   }
 
   function deleteRecord(label: string) {
-    const isSelected = label === selectedRecording;
+    const isSelected = label === selectedType?.label;
 
     if (isSelected) {
-      setSelectedRecording(undefined)
+      setSelectedType(null)
     }
 
     const newRecordingType = recordingTypes.filter((recordingType) => recordingType.label !== label);
@@ -33,12 +35,23 @@ export function useGetRecordingTypes() {
     setRecordingTypes(newRecordingType);
   }
 
+  function selectType(type: RecordingType) {
+    setSelectedType(type);
+  }
+
+  function updateRecord(label: string, updatedType: RecordingType) {
+    const updatedRecordingTypes = recordingTypes.map((recordingType) =>
+      recordingType.label === label ? updatedType : recordingType
+    );
+    setRecordingTypes(updatedRecordingTypes);
+  }
 
   return {
     createRecord,
     deleteRecord,
     recordingTypes,
-    setSelectedRecording,
-    selectedRecording,
+    selectedType,
+    selectType,
+    updateRecord,
   };
 }

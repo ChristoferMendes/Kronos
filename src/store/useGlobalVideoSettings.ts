@@ -1,8 +1,10 @@
+import { VideoType } from "@/lib/types/video.types";
 import { create } from "zustand";
 
 interface Screen {
   id: string;
   name: string;
+  type: VideoType;
 }
 
 interface Store {
@@ -25,6 +27,7 @@ export const useGlobalVideoSettings = create<Store>((set) => ({
   screen: {
     name: "Screen 1",
     id: "",
+    type: "screen",
   },
   fps: 60,
   quality: 1080,

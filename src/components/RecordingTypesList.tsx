@@ -6,7 +6,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { CircleHelp } from "lucide-react";
 
 export function RecordingTypesList() {
-  const { recordingTypes, setSelectedRecording, selectedRecording } = useGetRecordingTypes();
+  const { recordingTypes, setSelectedRecording } = useGetRecordingTypes();
 
   return (
     <div className="relative flex items-center space-x-2">

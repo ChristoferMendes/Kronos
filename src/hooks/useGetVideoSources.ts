@@ -11,7 +11,7 @@ export function useGetVideoSources() {
     setIsLoading(true);
     const inputSources = await window.video.getSources();
     inputSources.forEach((source) => {
-      const isScreen = source.name.includes("screen");
+      const isScreen = source.id.includes("screen");
       setVideoSources({ id: source.id, name: source.name, type: isScreen ? "screen" : "window" });
     });
     setIsLoading(false);

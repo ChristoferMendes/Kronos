@@ -1,11 +1,15 @@
+import { VideoType } from "@/lib/types/video.types";
+
 interface VideoOptions {
   fps: number;
   quality: number;
   volume: number;
+  type: VideoType;
 }
 
 export function buildVideoStream(videoId: string, options: VideoOptions) {
   const { fps, volume, quality } = options;
+  const audioType = options.type === "screen" ? "desktop" : "window";
 
   const constraints = {
     audio:
@@ -13,7 +17,7 @@ export function buildVideoStream(videoId: string, options: VideoOptions) {
         ? false
         : {
             mandatory: {
-              chromeMediaSource: "desktop",
+              chromeMediaSource: audioType,
             },
           },
     video: {

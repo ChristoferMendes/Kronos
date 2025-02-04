@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@/components/ui/context-menu";
+import { useRecordingTime } from "@/hooks/useRecordingTime";
 
 const videoTypes = [
   "Daily",
@@ -22,6 +23,7 @@ interface Props {
 export function VideoTypeSelector({ onClick, isRecording }: Readonly<Props>) {
   const [selectedType, setSelectedType] = useState<string>("Select Video Type");
   const isDefaultType = selectedType === "Select Video Type";
+  const { counter } = useRecordingTime(isRecording);
 
   function handleClick() {
     if (isDefaultType) return;
@@ -35,6 +37,7 @@ export function VideoTypeSelector({ onClick, isRecording }: Readonly<Props>) {
         <Button variant={isRecording ? "destructive" : "default"} className="w-[300px]" onClick={handleClick}>
           {isRecording ? "Stop Recording" : "Start Recording"} {selectedType}
         </Button>
+        {!!counter && <p>Recording: {counter}</p>}
       </ContextMenuTrigger>
       <ContextMenuContent className="w-[200px]">
         {videoTypes.map((type) => (
